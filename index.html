@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BUKU LOGISTIK KKN K_13 DESA LEBAH SEMPAGE</title>
+<title>Buku Logistik KKN</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -176,7 +176,7 @@ footer.hint { text-align: center; color: var(--ink-faint); font-size: 11.5px; ma
 <div class="plate">
   <div class="plate-top">
     <div class="plate-title">
-      <h1>BUKU LOGISTIK KKN K_13 DESA LEBAH SEMPAGE</h1>
+      <h1>Buku Logistik KKN</h1>
       <p>Catatan barang, kas, dan pengumuman posko — tersimpan di Google Sheets.</p>
     </div>
     <div class="saldo-stamp">
@@ -230,15 +230,19 @@ footer.hint { text-align: center; color: var(--ink-faint); font-size: 11.5px; ma
 <!-- TAB: TRANSAKSI -->
 <div class="panel" id="panel-transaksi">
   <div class="section-card">
-    <h2>Catat pembelian</h2>
-    <div class="field-row-3">
-      <div class="field"><label>Barang</label><select id="pilihBarang" oninput="updatePreview()"></select></div>
-      <div class="field"><label>Jumlah</label><input type="number" id="inputQty" min="1" value="1" oninput="updatePreview()"></div>
-      <div class="field"><label>Keperluan (opsional)</label><input type="text" id="inputKetTransaksi" placeholder="contoh: konsumsi rapat"></div>
-      <button class="btn-primary" id="btnBeli" onclick="handleBeli()">Catat</button>
+    <h2>Catat pembelian <span class="count" id="jumlahKeranjang"></span></h2>
+    <div class="helper" style="margin-bottom:10px;">Atur jumlah tiap barang yang mau dibeli pakai tombol − / +, boleh banyak barang sekaligus, lalu catat semuanya dengan satu klik.</div>
+    <div class="scroll-x"><table class="ledger">
+      <thead><tr><th>Barang</th><th style="text-align:right">Harga satuan</th><th style="text-align:center">Jumlah</th><th style="text-align:right">Subtotal</th></tr></thead>
+      <tbody id="tabelKeranjang"></tbody>
+    </table></div>
+    <div class="field" style="margin-top:14px;max-width:320px;">
+      <label>Keperluan (opsional, berlaku untuk semua barang di atas)</label>
+      <input type="text" id="inputKetTransaksi" placeholder="contoh: belanja mingguan posko">
     </div>
-    <div style="margin-top:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+    <div style="margin-top:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
       <div><div class="helper">Total pembelian</div><div class="total-preview" id="previewTotal">Rp 0</div></div>
+      <button class="btn-primary" id="btnBeli" onclick="handleBeli()">Catat semua</button>
     </div>
     <div class="alert error" id="alertTransaksi"></div>
     <div class="alert success" id="suksesTransaksi"></div>
@@ -295,97 +299,75 @@ footer.hint { text-align: center; color: var(--ink-faint); font-size: 11.5px; ma
     <div id="listPngm"><div class="empty-row">Belum ada pengumuman.</div></div>
   </div>
 
-  <!-- Data tetap: PDH -->
+  <!-- PDH (dinamis) -->
   <div class="section-card">
-    <h2>List Ukuran PDH</h2>
+    <h2>List Ukuran PDH <span class="count" id="jumlahPdh"></span></h2>
+    <div class="field-row-3" style="margin-bottom:12px;">
+      <div class="field"><label>Nama</label><input type="text" id="inputPdhNama" placeholder="Nama anggota"></div>
+      <div class="field"><label>Ukuran</label><input type="text" id="inputPdhUkuran" placeholder="contoh: L"></div>
+      <div class="field"><label>Divisi (opsional)</label><input type="text" id="inputPdhDivisi" placeholder="contoh: Logistik"></div>
+      <button class="btn-primary" id="btnTambahPdh" onclick="handleTambahPdh()">Tambah</button>
+    </div>
+    <div class="alert error" id="alertPdh"></div>
     <div class="scroll-x"><table class="ledger">
-      <thead><tr><th>#</th><th>Nama</th><th>Ukuran</th><th>Divisi</th></tr></thead>
-      <tbody>
-        <tr><td class="muted">1</td><td>Nareswari Pratiwi</td><td><span class="badge">M</span></td><td>Bendahara</td></tr>
-        <tr><td class="muted">2</td><td>Muhamad Risky</td><td><span class="badge">XL</span></td><td>Humas</td></tr>
-        <tr><td class="muted">3</td><td>Maulana Ihsan</td><td><span class="badge">L</span></td><td>Acara</td></tr>
-        <tr><td class="muted">4</td><td>Irwansyah</td><td><span class="badge">L</span></td><td>—</td></tr>
-        <tr><td class="muted">5</td><td>Lalu Ulil Amru</td><td><span class="badge">L</span></td><td>Logistik</td></tr>
-        <tr><td class="muted">6</td><td>Yunia Mala Aftilia</td><td><span class="badge">M</span></td><td>Logistik</td></tr>
-      </tbody>
+      <thead><tr><th>#</th><th>Nama</th><th>Ukuran</th><th>Divisi</th><th></th></tr></thead>
+      <tbody id="tabelPdh"></tbody>
     </table></div>
   </div>
 
-  <!-- Iuran -->
+  <!-- Iuran (dinamis) -->
   <div class="section-card">
     <h2>Iuran KKN</h2>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px;margin-bottom:16px;">
-      <div class="price-box"><div class="price-label">PDH + Rompi (kombinasi)</div><div class="price-val">Rp 198.000</div></div>
-      <div class="price-box"><div class="price-label">ID Card (lanyard)</div><div class="price-val">Rp 35.000</div></div>
-      <div class="price-box"><div class="price-label">Kaos lengan pendek</div><div class="price-val">Rp 65.000</div></div>
-      <div class="price-box"><div class="price-label">Kaos lengan panjang</div><div class="price-val">Rp 75.000</div></div>
+
+    <div style="margin-bottom:10px;font-size:13px;font-weight:600;">Daftar harga paket</div>
+    <div class="field-row" style="margin-bottom:10px;">
+      <div class="field"><label>Nama paket</label><input type="text" id="inputIhLabel" placeholder="contoh: Kaos lengan pendek"></div>
+      <div class="field"><label>Harga (Rp)</label><input type="number" id="inputIhHarga" placeholder="65000" min="0" step="1"></div>
+      <button class="btn-ghost btn-small" id="btnTambahIh" onclick="handleTambahIuranHarga()">Tambah</button>
     </div>
-    <div class="tf-box" style="max-width:300px;">
+    <div class="alert error" id="alertIh"></div>
+    <div id="listIuranHarga" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px;margin-bottom:16px;"></div>
+
+    <div style="margin-bottom:10px;font-size:13px;font-weight:600;">Rekening transfer</div>
+    <div class="field-row" style="margin-bottom:14px;">
+      <div class="field"><label>Nomor rekening</label><input type="text" id="inputRekNo" placeholder="contoh: 0819-1802-2711"></div>
+      <div class="field"><label>Atas nama</label><input type="text" id="inputRekNama" placeholder="contoh: NADIA UTAMI"></div>
+      <button class="btn-ghost btn-small" onclick="handleSimpanIuranInfo()">Simpan</button>
+    </div>
+    <div class="tf-box" id="boxIuranInfo" style="max-width:300px;display:none;">
       <div class="tf-label">Transfer Dana ke:</div>
-      <div class="tf-number">0819-1802-2711</div>
-      <div class="tf-name">NADIA UTAMI</div>
+      <div class="tf-number" id="tfIuranNo"></div>
+      <div class="tf-name" id="tfIuranNama"></div>
     </div>
-    <div class="scroll-x" style="margin-top:14px;"><table class="ledger">
-      <thead><tr><th>#</th><th>Nama</th><th>Paket</th><th style="text-align:right">Total (rb)</th><th>Status</th></tr></thead>
-      <tbody>
-        <tr><td class="muted">1</td><td>Maulana Ihsan</td><td>Kaos panjang</td><td class="num">308</td><td><span class="lunas">✅ Lunas</span></td></tr>
-        <tr><td class="muted">2</td><td>Nadia Utami</td><td>—</td><td class="num">225</td><td><span class="belum">⏳ Belum</span></td></tr>
-        <tr><td class="muted">3</td><td>Putri Jayanti</td><td>—</td><td class="num">233</td><td><span class="belum">⏳ Belum</span></td></tr>
-        <tr><td class="muted">4</td><td>Risky</td><td>Kaos panjang</td><td class="num">308</td><td><span class="lunas">✅ Lunas</span></td></tr>
-        <tr><td class="muted">5</td><td>Nareswari Pratiwi</td><td>Kaos panjang</td><td class="num">308</td><td><span class="lunas">✅ Lunas</span></td></tr>
-        <tr><td class="muted">6</td><td>Yunia</td><td>—</td><td class="num">208</td><td><span class="belum">⏳ Belum</span></td></tr>
-        <tr><td class="muted">7</td><td>Ismi</td><td>Kaos panjang</td><td class="num">308</td><td><span class="lunas">✅ Lunas</span></td></tr>
-        <tr><td class="muted">8</td><td>Ulil</td><td>Kaos pendek</td><td class="num">298</td><td><span class="lunas">✅ Lunas</span></td></tr>
-        <tr><td class="muted">9</td><td>Wahyu</td><td>Kaos pendek</td><td class="num">298</td><td><span class="lunas">✅ Lunas</span></td></tr>
-        <tr><td class="muted">10</td><td>Irwansyah</td><td>Kaos pendek</td><td class="num">298</td><td><span class="lunas">✅ Lunas</span></td></tr>
-      </tbody>
+
+    <div style="margin:16px 0 10px;font-size:13px;font-weight:600;">Status bayar anggota</div>
+    <div class="field-row-3" style="margin-bottom:10px;">
+      <div class="field"><label>Nama</label><input type="text" id="inputIaNama" placeholder="Nama anggota"></div>
+      <div class="field"><label>Paket (opsional)</label><input type="text" id="inputIaPaket" placeholder="contoh: Kaos panjang"></div>
+      <div class="field"><label>Total (Rp)</label><input type="number" id="inputIaTotal" placeholder="308000" min="0" step="1"></div>
+      <button class="btn-primary" id="btnTambahIa" onclick="handleTambahIuranAnggota()">Tambah</button>
+    </div>
+    <div class="alert error" id="alertIa"></div>
+    <div class="scroll-x"><table class="ledger">
+      <thead><tr><th>#</th><th>Nama</th><th>Paket</th><th style="text-align:right">Total</th><th>Status</th><th></th></tr></thead>
+      <tbody id="tabelIuranAnggota"></tbody>
     </table></div>
   </div>
 
-  <!-- Notulen -->
+  <!-- Notulen (dinamis) -->
   <div class="section-card">
     <h2>📝 Notulen KKN</h2>
-    <div class="notulen-block">
-      <div class="notulen-tanggal">Senin, 21 September 2026 — Pelepasan di Desa Lebah Sempage</div>
-      <ul class="notulen-list">
-        <li>Jam 10.00 WITA pelepasan di Kantor Desa Lebah Sempage</li>
-        <li>Doa → Pembukaan → Sambutan DPL dan Kepala Desa → Serah terima DPL kepada Kepala Desa → Foto bersama</li>
-        <li>Bawa surat — minta di LPPM; surat perizinan diserahkan ke pihak desa</li>
-        <li>Buat presensi</li>
-        <li>Sediakan jajan kotak 25 kotak, iuran masing-masing <strong>Rp 15.000</strong></li>
-        <li>Ada 9 dusun</li>
-      </ul>
-      <div class="tf-box" style="margin-top:10px;max-width:300px;">
-        <div class="tf-label">TF jajan kotak ke BNI:</div>
-        <div class="tf-number">1974021628</div>
-        <div class="tf-name">NARESWARI PRATIWI</div>
-      </div>
+    <div class="field" style="margin-bottom:8px;">
+      <label>Judul / tanggal</label>
+      <input type="text" id="inputNtlJudul" placeholder="contoh: Senin, 21 September 2026 — Pelepasan di Desa">
     </div>
-    <div class="notulen-block" style="margin-top:10px;">
-      <div class="notulen-tanggal">📸 Dokumentasi KKN (3 bulan)</div>
-      <ul class="notulen-list">
-        <li>Setiap kegiatan wajib ada dokumentasi</li>
-        <li>Dokumentasi harus mencantumkan: nama kegiatan, hari, tanggal, bulan, tahun, jam</li>
-      </ul>
+    <div class="field" style="margin-bottom:8px;">
+      <label>Isi (satu poin per baris)</label>
+      <textarea id="inputNtlIsi" placeholder="Tulis satu poin catatan per baris..."></textarea>
     </div>
-    <div class="notulen-block" style="margin-top:10px;">
-      <div class="notulen-tanggal">🎪 KKN Expo — Produk Unggulan Lebah Sempage</div>
-      <ul class="notulen-list"><li>Coklat dan pisang — hasil alam Lebah Sempage</li></ul>
-    </div>
-    <div class="notulen-block" style="margin-top:10px;">
-      <div class="notulen-tanggal">🧾 Keperluan Posko</div>
-      <ul class="notulen-list">
-        <li>Minta kwitansi (bertulis air dan listrik gratis)</li>
-        <li>Posko lengkap</li>
-      </ul>
-    </div>
-    <div class="notulen-block" style="margin-top:10px;">
-      <div class="notulen-tanggal">Kamis, 24 September 2026</div>
-      <ul class="notulen-list">
-        <li>Bawa barang ke posko &amp; bersih-bersih seharian</li>
-        <li>25 September 2026 — masuk Kantor Desa</li>
-      </ul>
-    </div>
+    <button class="btn-primary" id="btnTambahNtl" onclick="handleTambahNotulen()">Simpan notulen</button>
+    <div class="alert error" id="alertNtl"></div>
+    <div id="listNotulen" style="margin-top:14px;"></div>
   </div>
 
 </div><!-- /panel-pengumuman -->
@@ -401,7 +383,10 @@ var LS_KEY = "kkn_script_url";
 var SCRIPT_URL = "";
 
 // State (cache dari Sheets)
-var state = { saldo: 0, barang: [], transaksi: [], pengumuman: [] };
+var state = {
+  saldo: 0, barang: [], transaksi: [], pengumuman: [],
+  pdh: [], iuranHarga: [], iuranAnggota: [], iuranInfo: { noRekening: "", namaPenerima: "" }, notulen: []
+};
 
 // ═══════════════════════════════════════════
 //  INIT
@@ -483,10 +468,15 @@ function loadAll() {
   if (!SCRIPT_URL) return;
   showLoading("Memuat data dari Google Sheets…");
   apiGet({ action: "getAll" }).then(function(data) {
-    state.saldo      = Number(data.saldo) || 0;
-    state.barang     = data.barang || [];
-    state.transaksi  = data.transaksi || [];
-    state.pengumuman = data.pengumuman || [];
+    state.saldo        = Number(data.saldo) || 0;
+    state.barang       = data.barang || [];
+    state.transaksi    = data.transaksi || [];
+    state.pengumuman   = data.pengumuman || [];
+    state.pdh          = data.pdh || [];
+    state.iuranHarga   = data.iuranHarga || [];
+    state.iuranAnggota = data.iuranAnggota || [];
+    state.iuranInfo    = data.iuranInfo || { noRekening: "", namaPenerima: "" };
+    state.notulen      = data.notulen || [];
     renderAll();
     hideLoading();
   }).catch(function(e) {
@@ -500,6 +490,11 @@ function renderAll() {
   renderBarang();
   renderRiwayat();
   renderPengumuman();
+  renderPdh();
+  renderIuranHarga();
+  renderIuranInfo();
+  renderIuranAnggota();
+  renderNotulen();
 }
 
 // ═══════════════════════════════════════════
@@ -554,23 +549,18 @@ function handleTambahSaldo(e) {
 // ═══════════════════════════════════════════
 function renderBarang() {
   var tbody  = document.getElementById("tabelBarang");
-  var select = document.getElementById("pilihBarang");
   var jml    = document.getElementById("jumlahBarang");
   jml.textContent = state.barang.length ? "(" + state.barang.length + ")" : "";
 
   if (state.barang.length === 0) {
     tbody.innerHTML = '<tr><td colspan="3" class="empty-row">Belum ada barang. Tambahkan di atas.</td></tr>';
-    select.innerHTML = '<option value="">— belum ada barang —</option>';
   } else {
     tbody.innerHTML = state.barang.map(function(b) {
       return '<tr><td>' + esc(b.nama) + '</td><td class="num">' + fRp(b.harga) + '</td>' +
         '<td><button class="btn-danger-text" onclick="handleHapusBarang(\'' + esc(b.id) + '\')">Hapus</button></td></tr>';
     }).join("");
-    select.innerHTML = state.barang.map(function(b) {
-      return '<option value="' + esc(b.id) + '">' + esc(b.nama) + ' — ' + fRp(b.harga) + '</option>';
-    }).join("");
   }
-  updatePreview();
+  renderKeranjang();
 }
 
 function handleTambahBarang() {
@@ -601,39 +591,103 @@ function handleHapusBarang(id) {
 }
 
 // ═══════════════════════════════════════════
-//  TRANSAKSI / BELI
+//  TRANSAKSI / BELI — mode keranjang (banyak barang sekaligus)
 // ═══════════════════════════════════════════
+var cartQty = {}; // { barangId: jumlah }
+
+function renderKeranjang() {
+  var tbody = document.getElementById("tabelKeranjang");
+  var jml   = document.getElementById("jumlahKeranjang");
+
+  if (state.barang.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="4" class="empty-row">Belum ada barang. Tambahkan dulu di tab Data Barang.</td></tr>';
+    jml.textContent = "";
+    updatePreview();
+    return;
+  }
+  jml.textContent = "(" + state.barang.length + " barang)";
+
+  tbody.innerHTML = state.barang.map(function(b) {
+    var q = cartQty[b.id] || 0;
+    return '<tr>' +
+      '<td>' + esc(b.nama) + '</td>' +
+      '<td class="num">' + fRp(b.harga) + '</td>' +
+      '<td style="text-align:center;">' +
+        '<div style="display:inline-flex;align-items:center;gap:6px;">' +
+        '<button type="button" class="btn-ghost btn-small" onclick="ubahQtyKeranjang(\'' + esc(b.id) + '\', -1)">−</button>' +
+        '<input type="number" min="0" step="1" value="' + q + '" id="qty_' + esc(b.id) + '" ' +
+          'style="width:52px;text-align:center;padding:6px 4px;" oninput="setQtyKeranjang(\'' + esc(b.id) + '\', this.value)">' +
+        '<button type="button" class="btn-ghost btn-small" onclick="ubahQtyKeranjang(\'' + esc(b.id) + '\', 1)">+</button>' +
+        '</div>' +
+      '</td>' +
+      '<td class="num" id="sub_' + esc(b.id) + '">' + fRp(q * b.harga) + '</td>' +
+      '</tr>';
+  }).join("");
+
+  updatePreview();
+}
+
+// Update subtotal 1 baris tanpa render ulang seluruh tabel (biar input angka tidak kehilangan fokus)
+function updateSubtotalBaris(id) {
+  var b = state.barang.find(function(x) { return String(x.id) === String(id); });
+  if (!b) return;
+  var el = document.getElementById("sub_" + id);
+  if (el) el.textContent = fRp((cartQty[id] || 0) * Number(b.harga));
+}
+
+function ubahQtyKeranjang(id, delta) {
+  var cur = cartQty[id] || 0;
+  cur = Math.max(0, cur + delta);
+  cartQty[id] = cur;
+  var inputEl = document.getElementById("qty_" + id);
+  if (inputEl) inputEl.value = cur;
+  updateSubtotalBaris(id);
+  updatePreview();
+}
+
+function setQtyKeranjang(id, val) {
+  var q = parseInt(val, 10);
+  if (!isFinite(q) || q < 0) q = 0;
+  cartQty[id] = q;
+  updateSubtotalBaris(id);
+  updatePreview();
+}
+
 function updatePreview() {
-  var sel  = document.getElementById("pilihBarang");
-  var qty  = parseInt(document.getElementById("inputQty").value, 10) || 0;
-  var b    = state.barang.find(function(x) { return x.id == sel.value; });
-  document.getElementById("previewTotal").textContent = b ? fRp(b.harga * qty) : "Rp 0";
+  var total = 0;
+  state.barang.forEach(function(b) { total += (cartQty[b.id] || 0) * Number(b.harga); });
+  document.getElementById("previewTotal").textContent = fRp(total);
 }
 
 function handleBeli() {
-  var barangId = document.getElementById("pilihBarang").value;
-  var qty      = parseInt(document.getElementById("inputQty").value, 10);
-  var ket      = document.getElementById("inputKetTransaksi").value.trim();
-  var alErr    = document.getElementById("alertTransaksi");
-  var alOk     = document.getElementById("suksesTransaksi");
+  var ket   = document.getElementById("inputKetTransaksi").value.trim();
+  var alErr = document.getElementById("alertTransaksi");
+  var alOk  = document.getElementById("suksesTransaksi");
   alErr.classList.remove("show"); alOk.classList.remove("show");
 
-  if (!barangId) { alErr.textContent = "Pilih barang terlebih dahulu."; alErr.classList.add("show"); return; }
-  if (!qty || qty <= 0) { alErr.textContent = "Jumlah harus lebih dari 0."; alErr.classList.add("show"); return; }
+  var items = state.barang
+    .filter(function(b) { return (cartQty[b.id] || 0) > 0; })
+    .map(function(b) { return { barangId: b.id, qty: cartQty[b.id] }; });
+
+  if (items.length === 0) {
+    alErr.textContent = "Belum ada barang yang jumlahnya diisi. Pakai tombol − / + dulu.";
+    alErr.classList.add("show");
+    return;
+  }
 
   var btn = document.getElementById("btnBeli");
   btn.classList.add("btn-spinning");
-  apiPost({ action: "beliBarang", barangId: barangId, qty: qty, keterangan: ket })
+  apiPost({ action: "beliBanyak", items: items, keterangan: ket })
     .then(function(d) {
-      alOk.textContent = "Pembelian dicatat. Sisa saldo: " + fRp(d.saldo) + ".";
+      alOk.textContent = "Pembelian " + items.length + " jenis barang dicatat. Sisa saldo: " + fRp(d.saldo) + ".";
       alOk.classList.add("show");
       document.getElementById("inputKetTransaksi").value = "";
-      document.getElementById("inputQty").value = "1";
-      loadAll();
 
-      // Cetak nota otomatis
-      var barang = state.barang.find(function(b){ return b.id == barangId; });
-      if (barang) cetakNota({ namaBarang: barang.nama, hargaSatuan: barang.harga, qty: qty, total: d.total, saldoSesudah: d.saldo, tanggal: new Date().toISOString(), keterangan: ket });
+      // Cetak satu nota gabungan untuk semua barang yang dibeli
+      cetakNotaBanyak(d);
+
+      cartQty = {};
+      loadAll();
     })
     .catch(function(e) { alErr.textContent = e.message; alErr.classList.add("show"); })
     .finally(function() { btn.classList.remove("btn-spinning"); });
@@ -719,10 +773,268 @@ function handleHapusPengumuman(id) {
 }
 
 // ═══════════════════════════════════════════
+//  PDH (list ukuran seragam)
+// ═══════════════════════════════════════════
+function renderPdh() {
+  var tbody = document.getElementById("tabelPdh");
+  var jml   = document.getElementById("jumlahPdh");
+  jml.textContent = state.pdh.length ? "(" + state.pdh.length + ")" : "";
+  if (state.pdh.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" class="empty-row">Belum ada data. Tambahkan di atas.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = state.pdh.map(function(p, i) {
+    return '<tr><td class="muted">' + (i+1) + '</td><td>' + esc(p.nama) + '</td>' +
+      '<td><span class="badge">' + esc(p.ukuran) + '</span></td>' +
+      '<td>' + (p.divisi ? esc(p.divisi) : '<span class="muted">—</span>') + '</td>' +
+      '<td><button class="btn-danger-text" onclick="handleHapusPdh(\'' + esc(p.id) + '\')">Hapus</button></td></tr>';
+  }).join("");
+}
+
+function handleTambahPdh() {
+  var nama   = document.getElementById("inputPdhNama").value.trim();
+  var ukuran = document.getElementById("inputPdhUkuran").value.trim();
+  var divisi = document.getElementById("inputPdhDivisi").value.trim();
+  var al = document.getElementById("alertPdh");
+  al.classList.remove("show");
+  if (!nama)   { al.textContent = "Nama belum diisi."; al.classList.add("show"); return; }
+  if (!ukuran) { al.textContent = "Ukuran belum diisi."; al.classList.add("show"); return; }
+
+  var btn = document.getElementById("btnTambahPdh");
+  btn.classList.add("btn-spinning");
+  apiPost({ action: "addPdh", nama: nama, ukuran: ukuran, divisi: divisi })
+    .then(function() {
+      document.getElementById("inputPdhNama").value = "";
+      document.getElementById("inputPdhUkuran").value = "";
+      document.getElementById("inputPdhDivisi").value = "";
+      loadAll();
+    })
+    .catch(function(e) { al.textContent = e.message; al.classList.add("show"); })
+    .finally(function() { btn.classList.remove("btn-spinning"); });
+}
+
+function handleHapusPdh(id) {
+  if (!confirm("Hapus data ini?")) return;
+  apiPost({ action: "hapusPdh", id: id })
+    .then(function() { loadAll(); })
+    .catch(function(e) { alert(e.message); });
+}
+
+// ═══════════════════════════════════════════
+//  IURAN — daftar harga paket
+// ═══════════════════════════════════════════
+function renderIuranHarga() {
+  var el = document.getElementById("listIuranHarga");
+  if (state.iuranHarga.length === 0) {
+    el.innerHTML = '<div class="empty-row" style="grid-column:1/-1;">Belum ada paket. Tambahkan di atas.</div>';
+    return;
+  }
+  el.innerHTML = state.iuranHarga.map(function(h) {
+    return '<div class="price-box">' +
+      '<div class="price-label">' + esc(h.label) + '</div>' +
+      '<div class="price-val">' + fRp(h.harga) + '</div>' +
+      '<button class="btn-danger-text" style="padding:4px 0 0;" onclick="handleHapusIuranHarga(\'' + esc(h.id) + '\')">Hapus</button>' +
+      '</div>';
+  }).join("");
+}
+
+function handleTambahIuranHarga() {
+  var label = document.getElementById("inputIhLabel").value.trim();
+  var harga = parseFloat(document.getElementById("inputIhHarga").value);
+  var al = document.getElementById("alertIh");
+  al.classList.remove("show");
+  if (!label) { al.textContent = "Nama paket belum diisi."; al.classList.add("show"); return; }
+  if (!harga || harga <= 0) { al.textContent = "Harga harus lebih dari 0."; al.classList.add("show"); return; }
+
+  var btn = document.getElementById("btnTambahIh");
+  btn.classList.add("btn-spinning");
+  apiPost({ action: "addIuranHarga", label: label, harga: harga })
+    .then(function() {
+      document.getElementById("inputIhLabel").value = "";
+      document.getElementById("inputIhHarga").value = "";
+      loadAll();
+    })
+    .catch(function(e) { al.textContent = e.message; al.classList.add("show"); })
+    .finally(function() { btn.classList.remove("btn-spinning"); });
+}
+
+function handleHapusIuranHarga(id) {
+  if (!confirm("Hapus paket ini?")) return;
+  apiPost({ action: "hapusIuranHarga", id: id })
+    .then(function() { loadAll(); })
+    .catch(function(e) { alert(e.message); });
+}
+
+// ═══════════════════════════════════════════
+//  IURAN — info rekening transfer
+// ═══════════════════════════════════════════
+function renderIuranInfo() {
+  var box = document.getElementById("boxIuranInfo");
+  if (!state.iuranInfo || !state.iuranInfo.noRekening) { box.style.display = "none"; return; }
+  document.getElementById("tfIuranNo").textContent   = state.iuranInfo.noRekening;
+  document.getElementById("tfIuranNama").textContent = state.iuranInfo.namaPenerima || "";
+  box.style.display = "block";
+  document.getElementById("inputRekNo").value   = state.iuranInfo.noRekening || "";
+  document.getElementById("inputRekNama").value = state.iuranInfo.namaPenerima || "";
+}
+
+function handleSimpanIuranInfo() {
+  var noRek = document.getElementById("inputRekNo").value.trim();
+  var nama  = document.getElementById("inputRekNama").value.trim();
+  if (!noRek) { alert("Nomor rekening belum diisi."); return; }
+  apiPost({ action: "setIuranInfo", noRekening: noRek, namaPenerima: nama })
+    .then(function() { loadAll(); })
+    .catch(function(e) { alert(e.message); });
+}
+
+// ═══════════════════════════════════════════
+//  IURAN — status bayar anggota
+// ═══════════════════════════════════════════
+function renderIuranAnggota() {
+  var tbody = document.getElementById("tabelIuranAnggota");
+  if (state.iuranAnggota.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="empty-row">Belum ada data. Tambahkan di atas.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = state.iuranAnggota.map(function(a, i) {
+    var lunas = a.status === "lunas";
+    return '<tr><td class="muted">' + (i+1) + '</td><td>' + esc(a.nama) + '</td>' +
+      '<td>' + (a.paket ? esc(a.paket) : '<span class="muted">—</span>') + '</td>' +
+      '<td class="num">' + fRp(a.total) + '</td>' +
+      '<td><span class="' + (lunas ? 'lunas' : 'belum') + '" style="cursor:pointer" onclick="handleToggleIuran(\'' + esc(a.id) + '\')">' +
+        (lunas ? '✅ Lunas' : '⏳ Belum') + '</span></td>' +
+      '<td><button class="btn-danger-text" onclick="handleHapusIuranAnggota(\'' + esc(a.id) + '\')">Hapus</button></td></tr>';
+  }).join("");
+}
+
+function handleTambahIuranAnggota() {
+  var nama  = document.getElementById("inputIaNama").value.trim();
+  var paket = document.getElementById("inputIaPaket").value.trim();
+  var total = parseFloat(document.getElementById("inputIaTotal").value);
+  var al = document.getElementById("alertIa");
+  al.classList.remove("show");
+  if (!nama) { al.textContent = "Nama belum diisi."; al.classList.add("show"); return; }
+  if (!total || total < 0) { al.textContent = "Total belum diisi dengan benar."; al.classList.add("show"); return; }
+
+  var btn = document.getElementById("btnTambahIa");
+  btn.classList.add("btn-spinning");
+  apiPost({ action: "addIuranAnggota", nama: nama, paket: paket, total: total, status: "belum" })
+    .then(function() {
+      document.getElementById("inputIaNama").value = "";
+      document.getElementById("inputIaPaket").value = "";
+      document.getElementById("inputIaTotal").value = "";
+      loadAll();
+    })
+    .catch(function(e) { al.textContent = e.message; al.classList.add("show"); })
+    .finally(function() { btn.classList.remove("btn-spinning"); });
+}
+
+function handleHapusIuranAnggota(id) {
+  if (!confirm("Hapus data anggota ini?")) return;
+  apiPost({ action: "hapusIuranAnggota", id: id })
+    .then(function() { loadAll(); })
+    .catch(function(e) { alert(e.message); });
+}
+
+function handleToggleIuran(id) {
+  apiPost({ action: "toggleStatusIuran", id: id })
+    .then(function() { loadAll(); })
+    .catch(function(e) { alert(e.message); });
+}
+
+// ═══════════════════════════════════════════
+//  NOTULEN
+// ═══════════════════════════════════════════
+function renderNotulen() {
+  var el = document.getElementById("listNotulen");
+  if (state.notulen.length === 0) {
+    el.innerHTML = '<div class="empty-row">Belum ada notulen. Tambahkan di atas.</div>';
+    return;
+  }
+  el.innerHTML = state.notulen.map(function(n) {
+    var poin = String(n.isi || "").split("\n").map(function(s){ return s.trim(); }).filter(Boolean);
+    var listHtml = poin.length
+      ? '<ul class="notulen-list">' + poin.map(function(p){ return '<li>' + esc(p) + '</li>'; }).join("") + '</ul>'
+      : "";
+    return '<div class="notulen-block" style="position:relative;">' +
+      '<button class="btn-danger-text" style="position:absolute;top:8px;right:8px;" onclick="handleHapusNotulen(\'' + esc(n.id) + '\')">✕</button>' +
+      '<div class="notulen-tanggal" style="padding-right:50px;">' + esc(n.judul) + '</div>' +
+      listHtml +
+      '</div>';
+  }).join("");
+}
+
+function handleTambahNotulen() {
+  var judul = document.getElementById("inputNtlJudul").value.trim();
+  var isi   = document.getElementById("inputNtlIsi").value.trim();
+  var al = document.getElementById("alertNtl");
+  al.classList.remove("show");
+  if (!judul) { al.textContent = "Judul/tanggal belum diisi."; al.classList.add("show"); return; }
+
+  var btn = document.getElementById("btnTambahNtl");
+  btn.classList.add("btn-spinning");
+  apiPost({ action: "addNotulen", judul: judul, isi: isi })
+    .then(function() {
+      document.getElementById("inputNtlJudul").value = "";
+      document.getElementById("inputNtlIsi").value = "";
+      loadAll();
+    })
+    .catch(function(e) { al.textContent = e.message; al.classList.add("show"); })
+    .finally(function() { btn.classList.remove("btn-spinning"); });
+}
+
+function handleHapusNotulen(id) {
+  if (!confirm("Hapus notulen ini?")) return;
+  apiPost({ action: "hapusNotulen", id: id })
+    .then(function() { loadAll(); })
+    .catch(function(e) { alert(e.message); });
+}
+
+// ═══════════════════════════════════════════
 //  PDF
 // ═══════════════════════════════════════════
 function cetakNotaDariRiwayat(json) {
   try { var t = JSON.parse(json); cetakNota(t); } catch(e) {}
+}
+
+// Nota gabungan untuk checkout banyak barang sekaligus (dari beliBanyak)
+function cetakNotaBanyak(d) {
+  if (!window.jspdf) { alert("Library PDF belum siap, coba lagi."); return; }
+  if (!d.items || !d.items.length) return;
+  var jsPDF = window.jspdf.jsPDF;
+  var doc   = new jsPDF({ unit: "mm", format: "a5" });
+  var w = doc.internal.pageSize.getWidth(), x = 14, y = 16;
+
+  doc.setFont("helvetica", "bold"); doc.setFontSize(14);
+  doc.text("NOTA PEMBELIAN LOGISTIK KKN", w/2, y, {align:"center"});
+  y += 6; doc.setDrawColor(150); doc.line(x, y, w-x, y); y += 8;
+
+  doc.setFont("helvetica","normal"); doc.setFontSize(9);
+  doc.text("Tanggal: " + fTgl(new Date().toISOString()), x, y); y += 7;
+
+  doc.setFont("helvetica","bold"); doc.setFontSize(9);
+  doc.text("Barang", x, y); doc.text("Qty", x+78, y); doc.text("Subtotal", w-x, y, {align:"right"});
+  y += 2; doc.setDrawColor(180); doc.line(x, y, w-x, y); y += 5;
+
+  doc.setFont("helvetica","normal");
+  d.items.forEach(function(it) {
+    if (y > 190) { doc.addPage(); y = 20; }
+    doc.text(String(it.nama).slice(0,34), x, y);
+    doc.text(String(it.qty), x+78, y);
+    doc.text(fRp(it.subtotal), w-x, y, {align:"right"});
+    y += 6;
+  });
+
+  y += 3; doc.line(x, y, w-x, y); y += 8;
+  doc.setFont("helvetica","bold"); doc.setFontSize(11);
+  doc.text("Total pembelian", x, y); doc.text(fRp(d.total||0), w-x, y, {align:"right"}); y += 7;
+  doc.setFont("helvetica","normal");
+  doc.text("Sisa saldo", x, y); doc.text(fRp(d.saldo||0), w-x, y, {align:"right"}); y += 12;
+
+  doc.setFontSize(9); doc.setTextColor(130);
+  doc.text("Dicetak dari Buku Logistik KKN · " + new Date().toLocaleDateString("id-ID"), w/2, y, {align:"center"});
+
+  doc.save("nota-belanja-" + Date.now().toString(36) + ".pdf");
 }
 
 function cetakNota(t) {
