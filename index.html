@@ -462,9 +462,13 @@ function apiGet(params) {
 }
 
 function apiPost(body) {
+  // PENTING: pakai "text/plain" (bukan "application/json") agar browser
+  // tidak mengirim CORS preflight (OPTIONS) yang tidak didukung oleh
+  // Apps Script Web App. Apps Script tetap membaca e.postData.contents
+  // sebagai string JSON apa adanya di sisi server.
   return fetch(SCRIPT_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
     body: JSON.stringify(body)
   }).then(function(r) { return r.json(); }).then(function(d) {
     if (!d.ok) throw new Error(d.error || "Gagal dari server");
